@@ -1,0 +1,35 @@
+eureka:
+  client:
+    registerWithEureka: true # 表示是否注册自身到eureka服务器，
+    fetchRegistry: true # 是否从eureka上获取注册信息
+    #客户端间隔30秒重新获取eureka上的信息
+    registry-fetch-interval-seconds: 30
+    serviceUrl:
+      defaultZone: http://admin:123@localhost:8088/eureka/,http://admin:123@localhost:8089/eureka/
+  #心跳检测与续约时间
+  #测试时将值设置小些，保证服务关闭后注册中心能及时踢出服务
+  instance:
+    #Eureka客户端向服务发送心跳的时间间隔，单位为秒(客户端会告诉服务端按照这个规则)
+    lease-renewal-interval-in-seconds: 1
+    #Eureka服务端在收到最后一次心跳之后等待的时间上线，单位为秒，超过踢出(客户端告诉服务端按照这个规则)
+    lease-expiration-duration-in-seconds: 2
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true #使用ip注册
+
+server:
+  port: 8010
+spring:
+  application:
+    name: spring-boot-admin-server
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+#      #base-path: #2.0前默认/，2.0之后默认/actuator
+#  endpoint:
+#    health:
+#      show-details: ALWAYS #显示详情
+
+

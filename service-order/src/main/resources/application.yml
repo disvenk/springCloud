@@ -1,0 +1,29 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://admin:123@server2:8089/eureka/
+server:
+  port: 8084
+  servlet:
+    context-path: /order
+
+spring:
+#服务名称
+  application:
+    name: service-order
+
+swagger:
+  base-package: com.eureka.serviceorder.Controller
+  title: "订单服务" #标题
+  description: "订单的接口描述"
+  enabled: true
+  version: 2.0
+  terms-of-service-url: "https://www.baidu.com"
+  contact:
+    email: "disvenk@163.com"
+    name: "代绍文"
+    url: "https://www.baidu.com" #作者个人信息
+  license: #许可证
+  license-url: #许可证url
+  exclude-path: #需要排除的url
+  base-path: #需要处理的基础url规则，默认/**

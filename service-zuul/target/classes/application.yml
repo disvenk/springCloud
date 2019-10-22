@@ -1,0 +1,46 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://admin:123@localhost:8089/eureka/
+server:
+  port: 8085
+
+spring:
+#服务名称
+  application:
+    name: service-zuul
+  zipkin:
+    base-url: http://localhost:9001
+  sleuth:
+    sampler:
+      probability: 1
+
+zuul:
+  #prefix: #设置统一前缀
+  sensitive-headers: Cookie,Set-Cookie,Authorization #HTTP请求头不进行转发,这些敏感信息。如果每一个路由都需要配置一些额外的敏感Header时，那你可以通过 zuul.ignoredHeaders 来统一设置需要忽略的HTTP请求头，默认情况下，是没有配置的，如果项目中引入了Spring Security，那么Spring Security会自动加上这个配置，默认值为: Pragma、Cache-Control、X-Frame-Options、X-Content-Type-Options、X-XSS-Protection、Expries。
+  ignored-services: "*" #除了配置的路由，其他的都给我使用默认路由，什么是默认路由就是http://ZUUL_HOST:ZUUL_PORT/微服务在Eureka上的serviceId/** 。
+  routes:
+    api-a:
+      path: /memeber/** #如果请求的是以api-member开头的就会转发到service-memeber中去
+      service-id: service-memeber
+      #url: http://localhost:8080/proxy/ #会将/memeber/**的请求全部转发到/proxy/**
+      stripPrefix: false
+#      url: forward:/hello 表示访问 http://localhost:9100/test 地址时会自动跳转到 http://localhost:9100/hello 地址，注意，这个不是客户端跳转，在浏览器上是无法看到地址变化的，只能根据返回信息来验证，并且不能跨域名，只能在当前站点进行跳转
+#      ignored-patterns:/memeber/noRoute #访问/memeber会被路由到service-memeber服务，但是/memeber/noRoute不会被路由。
+    api-b:
+      path: /order/** #同上
+      service-id: service-order
+      stripPrefix: false #不取消前缀转发
+  host:
+    connect-timeout-millis: 6000
+    socket-timeout-millis: 6000
+  #strip-prefix: false #针对统一前缀
+    #max-per-route-connections: #每个主机的初始连接数，默认值 20
+    #max-total-connections:  #目标主机的最大连接数，默认值 200
+
+#http://localhost:8085/swagger-ui.html通过这个地址访问
+#通配符	含义	举例	解释
+#?	匹配任意单个字符	/feign-consumer/?	匹配/feign-consumer/a,/feign-consumer/b,/feign-consumer/c等
+#*	匹配任意数量的字符	/feign-consumer/*	匹配/feign-consumer/aaa,feign-consumer/bbb,/feign-consumer/ccc等，无法匹配/feign-consumer/a/b/c
+#**	匹配任意数量的字符	/feign-consumer/*	匹配/feign-consumer/aaa,feign-consumer/bbb,/feign-consumer/ccc等，也可以匹配/feign-consumer/a/b/c
+

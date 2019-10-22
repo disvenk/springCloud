@@ -1,0 +1,29 @@
+server:
+  port: 8089 #如果起不起来可以修改端口
+
+cluster:
+  port: 8088
+  hostname: server1
+
+eureka:
+  instance:
+    hostname: server2
+  client:
+    registerWithEureka: true # 表示是否注册自身到eureka服务器，集群的时候要为true
+    fetchRegistry: true # 是否从eureka上获取注册信息
+    serviceUrl:
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@${cluster.hostname}:${cluster.port}/eureka/
+  server:
+      enable-self-preservation: true #测试时关闭自我保护机制，保证服务不可用机制及时踢出
+      eviction-interval-timer-in-ms: 2000 #踢出服务间隔2秒
+
+spring:
+#服务名称
+  application:
+    name: spring-cloud-eureka
+
+#账户密码登录
+  security:
+    user:
+      name: admin
+      password: 123

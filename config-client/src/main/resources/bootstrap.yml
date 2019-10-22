@@ -1,0 +1,27 @@
+server:
+  port: 8011
+
+#2.0以后的版本
+management:
+  endpoints:
+    web:
+      exposure:
+        include: bus-refresh
+
+spring:
+  application:
+    name: config-client #git上的文件前缀名要和这个保持一致，横线后面的就通过profile去指定就可以了
+  cloud:
+    config:
+      name: config-client
+      label: master
+      profile: ${profile} #可以通过系统参数指定
+      uri: http://localhost:8086/
+
+  rabbitmq:
+    host: 47.104.19.44
+    port: 5672
+    username: disvenk
+    password: disvenk
+#Fetching config from server at: http://localhost:8888
+#application.yml无效，必须使用bootstrap.yml
